@@ -1,0 +1,9 @@
+docker build -t fire-risk-app .
+
+docker run -d \
+  --name fire-web \
+  --restart always \
+  -p 313:8000 \
+  fire-risk-app
+
+docker stop fire-web
