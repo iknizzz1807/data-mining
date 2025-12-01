@@ -1,0 +1,305 @@
+:root {
+  --bg-color: #fcfbf9;
+  /* Màu giấy cũ */
+  --panel-bg: #ffffff;
+  --border-color: #333333;
+  /* Viền đen đậm */
+  --accent-color: #003366;
+  /* Xanh Navy học thuật */
+  --text-color: #1a1a1a;
+  --danger-color: #8b0000;
+  /* Đỏ gạch */
+  --safe-color: #006400;
+  /* Xanh lá đậm */
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-mono: 'Courier New', 'Roboto Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-serif);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  height: 100vh;
+  /* Chặn chiều cao, không scroll body */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Compact */
+.scientific-header {
+  background-color: #e8e6e1;
+  border-bottom: 2px solid var(--border-color);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.scientific-header h1 {
+  font-size: 1.2rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-color);
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #555;
+  font-family: var(--font-mono);
+}
+
+/* Layout Chính: Chia 2 cột, input bên trái, result bên phải */
+.dashboard-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  /* Ẩn scroll thừa */
+}
+
+/* Chung cho các Panel */
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: var(--panel-bg);
+}
+
+.panel-header {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 8px 15px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* INPUT PANEL (Trái) */
+.input-panel {
+  flex: 3;
+  /* Chiếm 75% chiều rộng */
+  border-right: 2px solid var(--border-color);
+  overflow-y: auto;
+  /* Chỉ scroll khu vực input nếu màn hình quá bé */
+}
+
+.grid-layout {
+  display: grid;
+  /* Tự động chia cột, tối thiểu 200px, lấp đầy chiều ngang */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  /* Khoảng cách giữa các ô */
+  padding: 20px;
+}
+
+/* Style cho từng ô Input */
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #444;
+}
+
+.input-wrapper {
+  display: flex;
+  border: 1px solid #999;
+}
+
+.input-wrapper input {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  background: #fff;
+  color: #000;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  background-color: #f0f8ff;
+}
+
+/* Nút Random nhỏ (R) */
+.btn-mini-rand {
+  width: 30px;
+  background: #e0e0e0;
+  border: none;
+  border-left: 1px solid #999;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  color: #333;
+}
+
+.btn-mini-rand:hover {
+  background: #ccc;
+}
+
+/* RESULT PANEL (Phải) */
+.result-panel {
+  flex: 1;
+  /* Chiếm 25% chiều rộng */
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.status-box {
+  border: 2px solid #999;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  background: white;
+  flex-grow: 1;
+  /* Đẩy nội dung xuống */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-box h2 {
+  margin: 10px 0 0 0;
+  font-size: 1.5rem;
+}
+
+#statusIcon {
+  font-size: 3rem;
+  display: block;
+}
+
+/* Màu sắc trạng thái */
+.safe {
+  border-color: var(--safe-color);
+  color: var(--safe-color);
+  background: #eaffea;
+}
+
+.danger {
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+  background: #ffeaea;
+}
+
+.waiting {
+  border-color: #666;
+  color: #666;
+}
+
+/* Metrics & Progress Bar */
+.metrics-table {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  background: white;
+  padding: 15px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.progress-container {
+  width: 100%;
+  height: 20px;
+  background-color: #ddd;
+  border: 1px solid #999;
+  margin-top: 5px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--accent-color);
+  transition: width 0.5s ease;
+}
+
+/* Nút bấm chính */
+.btn-submit {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--accent-color);
+  color: white;
+  border: 2px solid black;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px #000;
+  /* Hiệu ứng nút bấm cổ điển */
+  transition: transform 0.1s, box-shadow 0.1s;
+  margin-top: auto;
+}
+
+.btn-submit:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+.btn-submit:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+/* Nút Random All trên header */
+.btn-tool {
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 5px 15px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-tool:hover {
+  background-color: #eee;
+}
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .input-panel {
+    overflow-y: visible;
+    border-right: none;
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  body {
+    overflow: auto;
+    height: auto;
+  }
+}
