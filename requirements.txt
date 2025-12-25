@@ -1,7 +1,12 @@
 fastapi
 uvicorn
-scikit-learn
 pandas
-joblib
 numpy
-pydantic
+scikit-learn
+catboost
+requests
+joblib
+geopandas
+shapely
+rtree
+python-multipart

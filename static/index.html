@@ -1,169 +1,449 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fire Risk Analysis System</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-  <div class="main-wrapper">
-    <header class="scientific-header">
-      <div class="header-left">
-        <h1>HỆ THỐNG DỰ BÁO NGUY CƠ CHÁY RỪNG</h1>
-        <p class="subtitle">Mô hình: Random Forest (Normalized Data) | Ver: 1.0</p>
-      </div>
-      <div class="header-right">
-        <button type="button" id="randomAllBtn" class="btn-tool">
-          <span>🎲</span> Random Data
-        </button>
-      </div>
-    </header>
-
-    <div class="dashboard-container">
-      <section class="panel input-panel">
-        <div class="panel-header">
-          <span>THÔNG SỐ ĐẦU VÀO (INPUT PARAMETERS)</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fire Risk AI - Hệ thống Cảnh báo Cháy rừng</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h1 class="brand-title">FireGuard AI</h1>
+          <p class="brand-subtitle">Hệ thống Cảnh báo Thông minh</p>
         </div>
-        <form id="predictionForm">
-          <div class="grid-layout">
-            <div class="input-group">
-              <label>Track</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="track" id="track" placeholder="-0.79" required>
-                <button type="button" class="btn-mini-rand" data-target="track">R</button>
-              </div>
-            </div>
 
-            <div class="input-group">
-              <label>Bright Ti5</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="bright_ti5" id="bright_ti5" placeholder="-0.07" required>
-                <button type="button" class="btn-mini-rand" data-target="bright_ti5">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Solar Rad (J/m²)</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="Solar_rad_J_m2" id="Solar_rad_J_m2" placeholder="0.84" required>
-                <button type="button" class="btn-mini-rand" data-target="Solar_rad_J_m2">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Latitude</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="latitude_x" id="latitude_x" placeholder="0.83" required>
-                <button type="button" class="btn-mini-rand" data-target="latitude_x">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Longitude</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="longitude_x" id="longitude_x" placeholder="-0.21" required>
-                <button type="button" class="btn-mini-rand" data-target="longitude_x">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Fire Risk Score</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="fire_risk_score" id="fire_risk_score" placeholder="0.56" required>
-                <button type="button" class="btn-mini-rand" data-target="fire_risk_score">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Precip Sum (30d)</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="Precip_sum_30d" id="Precip_sum_30d" placeholder="2.35" required>
-                <button type="button" class="btn-mini-rand" data-target="Precip_sum_30d">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Precip Sum (7d)</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="Precip_sum_7d" id="Precip_sum_7d" placeholder="-0.73" required>
-                <button type="button" class="btn-mini-rand" data-target="Precip_sum_7d">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>No Rain (7d)</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="no_rain_7d" id="no_rain_7d" placeholder="-0.43" required>
-                <button type="button" class="btn-mini-rand" data-target="no_rain_7d">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>GID_1</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="GID_1" id="GID_1" placeholder="1.81" required>
-                <button type="button" class="btn-mini-rand" data-target="GID_1">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Wind Max (km/h)</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="Wind_max_kmh" id="Wind_max_kmh" placeholder="-0.02" required>
-                <button type="button" class="btn-mini-rand" data-target="Wind_max_kmh">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Day/Night</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="daynight_N" id="daynight_N" value="-0.07" required>
-                <button type="button" class="btn-mini-rand" data-target="daynight_N">R</button>
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Acq Time</label>
-              <div class="input-wrapper">
-                <input type="number" step="any" name="acq_time" id="acq_time" placeholder="0.003" required>
-                <button type="button" class="btn-mini-rand" data-target="acq_time">R</button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </section>
-
-      <aside class="panel result-panel">
-        <div class="panel-header">
-          <span>KẾT QUẢ PHÂN TÍCH (ANALYSIS RESULT)</span>
-        </div>
-        <div class="result-content">
-          <div id="statusBox" class="status-box waiting">
-            <span id="statusIcon">⚠</span>
-            <h2 id="predictionResult">SẴN SÀNG</h2>
-          </div>
-
-          <div class="metrics-table">
-            <div class="metric-row">
-              <span class="label">Xác suất (Probability):</span>
-              <span class="value" id="probText">---</span>
-            </div>
-            <div class="progress-container">
-              <div id="probabilityBar" class="progress-bar"></div>
-            </div>
-          </div>
-
-          <button type="submit" form="predictionForm" id="submitBtn" class="btn-submit">
-            CHẠY MÔ HÌNH (RUN)
+        <nav class="nav-menu">
+          <button class="nav-item active" data-tab="predict">
+            <span class="nav-label">Dự báo Rủi ro</span>
           </button>
+          <button class="nav-item" data-tab="map">
+            <span class="nav-label">Bản đồ Realtime</span>
+          </button>
+          <button class="nav-item" data-tab="analytics">
+            <span class="nav-label">Phân tích Dữ liệu</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="model-badge">
+            <span class="badge-label">Model</span>
+            <span class="badge-value">CatBoost v1.0</span>
+          </div>
+          <div class="accuracy-badge">
+            <span class="badge-label">Độ chính xác</span>
+            <span class="badge-value">99.2%</span>
+          </div>
+          <p class="copyright">© 2025 Vietnam Fire Prevention System</p>
         </div>
       </aside>
-    </div>
-  </div>
-  <script src="script.js"></script>
-</body>
 
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- ============ TAB 1: DỰ BÁO ============ -->
+        <section id="tab-predict" class="tab-content active">
+          <header class="page-header">
+            <div>
+              <h2 class="page-title">Dự báo Rủi ro Cháy rừng</h2>
+              <p class="page-subtitle">
+                Nhập các thông số môi trường để phân tích nguy cơ cháy
+              </p>
+            </div>
+            <button class="btn-secondary" id="btnRandomData">
+              Tạo dữ liệu mẫu
+            </button>
+          </header>
+
+          <div class="predict-grid">
+            <!-- FORM INPUT -->
+            <div class="card form-card">
+              <form id="predictForm">
+                <!-- Section 1: Vị trí -->
+                <div class="form-section">
+                  <h3 class="section-title">Thông tin Vị trí</h3>
+                  <div class="form-grid-2">
+                    <div class="form-group">
+                      <label class="form-label">Tỉnh thành</label>
+                      <select name="province" class="form-input" required>
+                        <option value="">-- Chọn tỉnh --</option>
+                        <option value="Gia Lai">Gia Lai</option>
+                        <option value="Kon Tum">Kon Tum</option>
+                        <option value="Nghệ An">Nghệ An</option>
+                        <option value="Hà Tĩnh">Hà Tĩnh</option>
+                        <option value="Đắk Lắk">Đắk Lắk</option>
+                        <option value="Đắk Nông">Đắk Nông</option>
+                        <option value="Lâm Đồng">Lâm Đồng</option>
+                        <option value="Sơn La">Sơn La</option>
+                        <option value="Lai Châu">Lai Châu</option>
+                        <option value="Điện Biên">Điện Biên</option>
+                        <option value="Thanh Hóa">Thanh Hóa</option>
+                        <option value="Quảng Bình">Quảng Bình</option>
+                        <option value="Quảng Trị">Quảng Trị</option>
+                        <option value="Phú Yên">Phú Yên</option>
+                        <option value="Bình Định">Bình Định</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Thời điểm</label>
+                      <select name="daynight" class="form-input" required>
+                        <option value="1">Ban ngày</option>
+                        <option value="0">Ban đêm</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Vĩ độ (Latitude)</label>
+                      <input
+                        type="number"
+                        step="0.0001"
+                        name="latitude"
+                        class="form-input"
+                        placeholder="VD: 13.7563"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Kinh độ (Longitude)</label>
+                      <input
+                        type="number"
+                        step="0.0001"
+                        name="longitude"
+                        class="form-input"
+                        placeholder="VD: 108.0171"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 2: Thời tiết -->
+                <div class="form-section">
+                  <h3 class="section-title">Thông số Thời tiết</h3>
+                  <div class="form-grid-3">
+                    <div class="form-group">
+                      <label class="form-label">Nhiệt độ Max (°C)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="Tmax_C"
+                        class="form-input"
+                        placeholder="VD: 35.5"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Độ ẩm Max (%)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="RHmax_pct"
+                        class="form-input"
+                        placeholder="VD: 65"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Gió Max (km/h)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="Wind_max_kmh"
+                        class="form-input"
+                        placeholder="VD: 15.2"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Mưa hôm nay (mm)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="Precip_sum_mm"
+                        class="form-input"
+                        placeholder="VD: 0"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Mưa 7 ngày (mm)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="Precip_sum_7d"
+                        class="form-input"
+                        placeholder="VD: 5.3"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Mưa 30 ngày (mm)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="Precip_sum_30d"
+                        class="form-input"
+                        placeholder="VD: 20.8"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Bức xạ Mặt trời (J/m²)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="Solar_rad_J_m2"
+                        class="form-input"
+                        placeholder="VD: 25.3"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 3: Dữ liệu Vệ tinh -->
+                <div class="form-section">
+                  <h3 class="section-title">Dữ liệu Vệ tinh (FIRMS)</h3>
+                  <div class="form-grid-2">
+                    <div class="form-group">
+                      <label class="form-label">Độ sáng (Kelvin)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="bright_ti5"
+                        class="form-input"
+                        placeholder="VD: 320.5"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label"
+                        >Năng lượng giải phóng (FRP)</label
+                      >
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="frp"
+                        class="form-input"
+                        placeholder="VD: 10.2"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-submit">
+                  <span id="submitText">Phân tích Rủi ro</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- RESULT PANEL -->
+            <div class="result-panel">
+              <!-- Placeholder khi chưa có kết quả -->
+              <div id="resultPlaceholder" class="card placeholder-card">
+                <div class="placeholder-content">
+                  <div class="placeholder-icon">🔥</div>
+                  <h3 class="placeholder-title">Chưa có kết quả phân tích</h3>
+                  <p class="placeholder-text">
+                    Nhập đầy đủ thông tin và nhấn "Phân tích Rủi ro" để xem dự
+                    báo nguy cơ cháy rừng
+                  </p>
+                </div>
+              </div>
+
+              <!-- Kết quả sau khi phân tích -->
+              <div id="resultCard" class="card result-card hidden">
+                <div class="result-header">
+                  <span class="result-label">KẾT QUẢ PHÂN TÍCH</span>
+                  <span id="resultTimestamp" class="result-time"></span>
+                </div>
+
+                <div class="result-main">
+                  <h2 id="resultRisk" class="result-risk-level">---</h2>
+                  <div class="result-probability">
+                    <span class="probability-label">Xác suất cháy</span>
+                    <div class="probability-bar-container">
+                      <div id="probabilityBar" class="probability-bar"></div>
+                    </div>
+                    <span id="probabilityValue" class="probability-value"
+                      >0%</span
+                    >
+                  </div>
+                </div>
+
+                <div class="result-details">
+                  <div class="detail-item">
+                    <span class="detail-label">Model sử dụng</span>
+                    <span class="detail-value">CatBoost Classifier</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Độ chính xác (ROC-AUC)</span>
+                    <span class="detail-value">0.992</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">F1-Score</span>
+                    <span class="detail-value">0.923</span>
+                  </div>
+                </div>
+
+                <div class="result-recommendation">
+                  <h4 class="recommendation-title">Khuyến nghị</h4>
+                  <p id="recommendationText" class="recommendation-text"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ TAB 2: BẢN ĐỒ ============ -->
+        <section id="tab-map" class="tab-content">
+          <header class="page-header">
+            <div>
+              <h2 class="page-title">Bản đồ Điểm nóng</h2>
+              <p class="page-subtitle">
+                Dữ liệu từ NASA FIRMS - Click để xem dự báo
+              </p>
+            </div>
+
+            <!-- TIME RANGE SELECTOR -->
+            <div class="time-range-selector">
+              <label class="range-label">Khoảng thời gian:</label>
+              <select id="timeRange" class="range-select">
+                <option value="1">Hôm nay</option>
+                <option value="3">3 ngày qua</option>
+                <option value="7">7 ngày qua</option>
+                <option value="10">10 ngày qua (Max)</option>
+                <!-- <option value="30">30 ngày qua</option> Bỏ vì không có data -->
+                <!-- <option value="365">1 năm qua</option> Bỏ vì không có data -->
+              </select>
+              <button id="btnRefreshMap" class="btn-secondary btn-refresh">
+                Cập nhật
+              </button>
+            </div>
+          </header>
+
+          <div class="map-stats">
+            <div class="stat-badge">
+              <span class="stat-badge-label">Số điểm nóng</span>
+              <span id="hotspotCount" class="stat-badge-value">---</span>
+            </div>
+            <div class="legend-group">
+              <div class="legend-item">
+                <span class="legend-dot danger"></span>
+                <span class="legend-text">Điểm nóng (Click để dự báo)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot info"></span>
+                <span class="legend-text"
+                  >Vị trí thường (Click để dự báo môi trường)</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="card map-card">
+            <div id="leafletMap" class="map-container"></div>
+            <div id="mapLoading" class="map-loading">
+              <div class="loading-spinner"></div>
+              <p>Đang tải dữ liệu bản đồ...</p>
+            </div>
+          </div>
+
+          <div class="map-info-panel">
+            <div class="info-card">
+              <h4 class="info-title">Hướng dẫn sử dụng</h4>
+              <ul class="info-list">
+                <li>
+                  <strong>Click vào điểm đỏ (điểm nóng)</strong>: Dự báo dựa
+                  trên dữ liệu thực tế từ vệ tinh
+                </li>
+                <li>
+                  <strong>Click vào vị trí trống</strong>: Dự báo nguy cơ cháy
+                  dựa trên điều kiện môi trường
+                </li>
+                <li>Chọn khoảng thời gian để xem dữ liệu lịch sử</li>
+                <li>Sử dụng scroll chuột để zoom in/out</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ TAB 3: PHÂN TÍCH ============ -->
+        <section id="tab-analytics" class="tab-content">
+          <header class="page-header">
+            <div>
+              <h2 class="page-title">Thống kê & Phân tích</h2>
+              <p class="page-subtitle">Dữ liệu lịch sử từ 2023 - 2025</p>
+            </div>
+          </header>
+
+          <div class="analytics-grid">
+            <div class="card chart-card">
+              <div class="chart-header">
+                <h3 class="chart-title">Top 20 Vùng Nguy cơ Cao</h3>
+                <p class="chart-subtitle">Số lượng điểm nóng theo tỉnh</p>
+              </div>
+              <div class="chart-container">
+                <canvas id="provinceChart"></canvas>
+              </div>
+            </div>
+
+            <div class="card chart-card">
+              <div class="chart-header">
+                <h3 class="chart-title">Tần suất Cháy theo Tháng</h3>
+                <p class="chart-subtitle">Phân bố thời gian trong năm</p>
+              </div>
+              <div class="chart-container">
+                <canvas id="monthChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-summary">
+            <div class="stat-card">
+              <div class="stat-value" id="statTotalFires">---</div>
+              <div class="stat-label">Tổng số điểm nóng</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="statHighRisk">---</div>
+              <div class="stat-label">Vùng nguy cơ cao</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="statPeakMonth">---</div>
+              <div class="stat-label">Tháng cao điểm</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+      <span id="toastMessage"></span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
